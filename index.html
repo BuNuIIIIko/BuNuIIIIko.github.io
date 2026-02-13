@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>tanya 1ove</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Eater&family=Metal+Mania&family=Nosifer&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Metal Mania', 'Georgia', serif;
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+
+        .bg-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(12px) brightness(0.4);
+            z-index: -2;
+        }
+
+        .blood-drip-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .blood-drop {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(180deg, rgba(139, 0, 0, 0.8), rgba(139, 0, 0, 0));
+            animation: drip linear infinite;
+        }
+
+        @keyframes drip {
+            0% {
+                top: -50px;
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        .header h1 {
+            font-family: 'Eater', cursive;
+            font-size: clamp(1.8rem, 6vw, 4rem);
+            font-weight: 400;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #8b0000;
+            text-shadow: 0 0 25px rgba(220, 20, 60, 1), 0 0 50px rgba(139, 0, 0, 0.8), 3px 3px 6px rgba(0, 0, 0, 1);
+            line-height: 1.5;
+            padding: 0 20px;
+        }
+
+        .profiles-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .profile {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .profile:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .profile:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        #profile2 .heart-container {
+            transform: scaleX(-1);
+        }
+
+        .heart-container {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .heart-container:hover {
+            transform: scale(1.05);
+        }
+.heart-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 25px rgba(220, 20, 60, 0.9)) drop-shadow(0 0 50px rgba(139, 0, 0, 0.6));
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        .avatar {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid rgba(139, 0, 0, 1);
+            box-shadow: 
+                0 0 30px rgba(220, 20, 60, 1),
+                0 0 50px rgba(139, 0, 0, 0.8),
+                0 5px 20px rgba(139, 0, 0, 1),
+                inset 0 0 25px rgba(0, 0, 0, 0.9),
+                0 0 60px rgba(220, 20, 60, 0.6);
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(139, 0, 0, 0.6), transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(220, 20, 60, 0.4), transparent 60%),
+                linear-gradient(45deg, rgba(139, 0, 0, 0.4), transparent 30%, rgba(139, 0, 0, 0.4));
+            border: 3px solid rgba(139, 0, 0, 0.8);
+            box-shadow: 
+                0 0 20px rgba(139, 0, 0, 0.9),
+                inset 0 0 15px rgba(139, 0, 0, 0.3);
+            animation: bloodGlow 2s ease-in-out infinite;
+        }
+
+        .avatar::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 60px;
+            background: 
+                linear-gradient(180deg, 
+                    rgba(139, 0, 0, 1) 0%,
+                    rgba(139, 0, 0, 0.8) 30%,
+                    rgba(139, 0, 0, 0.4) 60%,
+                    rgba(139, 0, 0, 0) 100%
+                );
+            border-radius: 0 0 50% 50%;
+            animation: bloodDrip 3s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        .profile::after {
+            content: '';
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 30px;
+            background: 
+                linear-gradient(180deg, 
+                    rgba(139, 0, 0, 0.6) 0%,
+                    rgba(139, 0, 0, 0.3) 50%,
+                    rgba(139, 0, 0, 0) 100%
+                );
+            animation: bloodDrip2 4s ease-in-out infinite 1s;
+        }
+
+        @keyframes bloodDrip {
+            0%, 30% {
+                opacity: 0;
+                height: 0;
+                transform: translateX(-50%) scaleY(0);
+            }
+            50% {
+                opacity: 1;
+                height: 60px;
+                transform: translateX(-50%) scaleY(1);
+            }
+            80%, 100% {
+                opacity: 0.3;
+                height: 60px;
+                transform: translateX(-50%) scaleY(1);
+            }
+        }
+
+        @keyframes bloodDrip2 {
+            0%, 40% {
+                opacity: 0;
+                height: 0;
+            }
+            60% {
+                opacity: 0.8;
+                height: 30px;
+            }
+            90%, 100% {
+                opacity: 0;
+                height: 30px;
+            }
+        }
+
+        @keyframes bloodGlow {
+            0%, 100% {
+                opacity: 0.5;
+                transform: scale(1);
+                border-color: rgba(139, 0, 0, 0.6);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.15);
+                border-color: rgba(220, 20, 60, 1);
+            }
+        }
+.username {
+            font-family: 'Metal Mania', cursive;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #8b0000;
+            text-shadow: 0 0 20px rgba(220, 20, 60, 1), 0 0 40px rgba(139, 0, 0, 0.8);
+            letter-spacing: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .username:hover {
+            color: #dc143c;
+            text-shadow: 0 0 30px rgba(255, 0, 0, 1), 0 0 60px rgba(220, 20, 60, 1);
+            transform: scale(1.05);
+        }
+
+        .pulse-line {
+            flex: 0 0 auto;
+            width: 200px;
+            height: 100px;
+            position: relative;
+            animation: fadeIn 1s ease-in 0.4s both;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pulse-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px rgba(220, 20, 60, 1)) drop-shadow(0 0 30px rgba(139, 0, 0, 0.8));
+        }
+
+        .pulse-path {
+            stroke: #ff0000;
+            stroke-width: 4;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+            animation: pulseDraw 2.5s ease-in-out infinite;
+        }
+
+        .timer-container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px 50px;
+            border-radius: 20px;
+            border: 2px solid rgba(220, 20, 60, 0.3);
+            box-shadow: 0 0 30px rgba(220, 20, 60, 0.2);
+            animation: fadeInUp 1s ease-out 0.8s both;
+            backdrop-filter: blur(10px);
+            margin-top: auto;
+            margin-bottom: 20px;
+        }
+
+        .timer-label {
+            font-size: 1.2rem;
+            color: #dc143c;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(220, 20, 60, 0.5);
+        }
+
+        .timer {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-weight: bold;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 15px rgba(220, 20, 60, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            10% {
+                transform: scale(1.05);
+            }
+            20% {
+                transform: scale(1);
+            }
+            30% {
+                transform: scale(1.05);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulseDraw {
+            0% {
+                stroke-dashoffset: 500;
+            }
+            50% {
+                stroke-dashoffset: 0;
+            }
+            100% {
+                stroke-dashoffset: -500;
+            }
+        }
+
+        @media (max-width: 950px) {
+            .profiles-container {
+                gap: 25px;
+            }
+            
+            .pulse-line {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                gap: 20px;
+                padding: 25px 3px 15px;
+            }
+
+            .profiles-container {
+                gap: 8px;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                max-width: 100vw;
+                padding: 0;
+            }
+
+            .heart-container {
+                width: 180px;
+                height: 180px;
+            }
+.avatar {
+                width: 60px;
+                height: 60px;
+                border: 4px solid rgba(139, 0, 0, 1);
+            }
+
+            .avatar::before {
+                top: -6px;
+                left: -6px;
+                right: -6px;
+                bottom: -6px;
+                border: 2px solid rgba(139, 0, 0, 0.6);
+            }
+
+            .username {
+                font-size: 1.6rem;
+            }
+
+            .pulse-line {
+                width: 90px;
+                height: 70px;
+                flex-shrink: 0;
+            }
+
+            .pulse-svg {
+                transform: none;
+            }
+
+            .timer-container {
+                padding: 18px 20px;
+            }
+
+            .timer-label {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px 1px 10px;
+            }
+
+            .profiles-container {
+                gap: 6px;
+                padding: 0;
+                width: 100%;
+            }
+
+            .heart-container {
+                width: 140px;
+                height: 140px;
+            }
+
+            .avatar {
+                width: 45px;
+                height: 45px;
+                border: 3px solid rgba(139, 0, 0, 1);
+            }
+
+            .avatar::before {
+                top: -4px;
+                left: -4px;
+                right: -4px;
+                bottom: -4px;
+                border: 2px solid rgba(139, 0, 0, 0.6);
+            }
+
+            .username {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+            }
+
+            .pulse-line {
+                width: 80px;
+                height: 50px;
+            }
+
+            .pulse-svg {
+                width: 100%;
+                height: 100%;
+            }
+
+            .timer-container {
+                padding: 12px 15px;
+            }
+
+            .timer {
+                font-size: clamp(1rem, 3vw, 1.5rem);
+            }
+        }
+
+        .loading {
+            color: #dc143c;
+            font-size: 1rem;
+            text-align: center;
+            padding: 10px;
+        }
+
+        #profile2 .heart-container {
+            transform: scaleX(-1);
+        }
+
+        .heart-container {
+            position: relative;
+            width: 240px;
+            height: 240px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .heart-container:hover {
+            transform: scale(1.05);
+        }
+
+        .heart-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 25px rgba(220, 20, 60, 0.9)) drop-shadow(0 0 50px rgba(139, 0, 0, 0.6));
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        /* ============================= */
+/* iPhone 16 Pro Adaptive Layer  */
+/* ============================= */
+
+@media screen and (max-width: 430px) {
+
+    .container {
+        padding-top: calc(25px + env(safe-area-inset-top));
+        padding-bottom: calc(15px + env(safe-area-inset-bottom));
+        gap: 20px;
+    }
+
+    .profiles-container {
+        gap: 10px;
+        flex-wrap: nowrap;
+    }
+
+    .heart-container {
+        width: clamp(130px, 38vw, 170px);
+        height: clamp(130px, 38vw, 170px);
+    }
+
+    .avatar {
+        width: clamp(45px, 14vw, 65px);
+        height: clamp(45px, 14vw, 65px);
+    }
+
+    .pulse-line {
+        width: clamp(70px, 18vw, 110px);
+        height: clamp(50px, 12vw, 80px);
+    }
+
+    .username {
+        font-size: clamp(1rem, 4vw, 1.4rem);
+        letter-spacing: 2px;
+    }
+
+    .timer-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .timer {
+        font-size: clamp(1rem, 4vw, 1.5rem);
+    }
+}
+
+    </style>
+</head>
+<body>
+
+    
+
+    
+    <div class="bg-blur"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1>Happy valentines day,<br>lyublyu teb9 o4enb <3</h1>
+        </header>
+
+        <div class="profiles-container">
+            <div class="profile" id="profile1">
+                <div class="heart-container">
+                    <img src="buno.jpg" alt="Heart" class="heart-bg">
+                    <img id="avatar1" src="" alt="Avatar" class="avatar" style="display: none;">
+                </div>
+                <span id="username1" class="username">@hordi_xyz</span>
+            </div>
+
+            <div class="pulse-line">
+                <svg class="pulse-svg" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet">
+                    <path class="pulse-path" d="M 0,50 L 30,50 L 45,25 L 60,75 L 75,30 L 90,70 L 105,20 L 120,80 L 135,50 L 170,50 L 200,50"/>
+                </svg>
+            </div>
+
+            <div class="profile" id="profile2">
+                <div class="heart-container">
+                    <img src="sawa.jpg" alt="Heart" class="heart-bg">
+                    <img id="avatar2" src="" alt="Avatar" class="avatar" style="display: none;">
+                </div>
+                <span id="username2" class="username">@505</span>
+            </div>
+        </div>
+
+        <div class="timer-container">
+            <div class="timer-label">Together Since</div>
+            <div class="timer" id="timer">Loading...</div>
+        </div>
+    </div>
+<script>
+    // Fetch Telegram profile data via PHP
+    async function fetchTelegramProfile(username, avatarId, usernameId) {
+        try {
+            console.log(`Fetching profile for ${username}...`);
+            
+            // Fetch via PHP script
+            const response = await fetch(`get_profile.php?username=${encodeURIComponent(username)}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log(`Got profile data for ${username}:`, data);
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            // Set avatar if available
+            if (data.avatar) {
+                const avatarImg = document.getElementById(avatarId);
+                avatarImg.src = data.avatar;
+                avatarImg.style.display = 'block';
+                console.log(`Set avatar for ${username}: ${data.avatar}`);
+            }
+
+            // Set username if available
+            if (data.name && data.name !== username) {
+                document.getElementById(usernameId).textContent = data.name;
+                console.log(`Set username to: ${data.name}`);
+            } else {
+                document.getElementById(usernameId).textContent = '@' + username;
+            }
+            
+        } catch (error) {
+            console.error(`Error fetching profile for ${username}:`, error);
+            
+            // Fallback data
+            console.log(`Using fallback data for ${username}`);
+
+            if (username === 'rapexyz') {
+                const avatar = document.getElementById(avatarId);
+                avatar.src = 'https://cdn4.telesco.pe/file/TikCNswJ9pofb3zTwFnl4dh756g-zsNRS_nUaP5Y0KsoDJwzggDJ0SWeAEA3_l1E3GB3X_AlVP1EUr3YT0RZiqDFsJUgzI6MT9U3j9PjmHGEc78ZJfPF8ZgS42mnlQEvFTZL0NwevckN9GNgGHXyv7pvHnJcwr-CDNJ-m4_0Par3WGZvhFQICqtl9S5Abe9utSOtlxBSTtOMtE8nbV07OGlxUxdrcx0I1tTuIGXS678tvwVwcg_k_xz3bEL_0ZaQ8PgckFwdhH8TewSGDwuNf9or5svTFP5lbVHOZTdihTrsMzmf_D4A_kMP0oHlYTyCB18GDkJ0dwe2fK3hmV54ZA.jpg';
+                avatar.style.display = 'block';
+                document.getElementById(usernameId).textContent = 'dump';
+            } 
+            else if (username === 'hydrosend') {
+                const avatar = document.getElementById(avatarId);
+                avatar.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="200"%3E%3Ccircle cx="100" cy="100" r="90" fill="%238b0000"/%3E%3Ctext x="100" y="130" font-size="80" text-anchor="middle" fill="white" font-family="Arial"%3EH%3C/text%3E%3C/svg%3E';
+                avatar.style.display = 'block';
+                document.getElementById(usernameId).textContent = 'hydrosend';
+            }
+        }
+    }
+
+    // Load profiles
+    fetchTelegramProfile('greatimetoattack', 'avatar1', 'username1');
+    fetchTelegramProfile('wierry', 'avatar2', 'username2');
+
+    // Timer functionality
+    const startDate = new Date('2024-04-04T10:20:00');
+
+    function updateTimer() {
+        const now = new Date();
+        const diff = now - startDate;
+
+        const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+        const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        let timerText = '';
+        if (years > 0) {
+            timerText += `${years}y `;
+        }
+
+        timerText += `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+        document.getElementById('timer').textContent = timerText;
+    }
+
+    // Create blood drips
+    function createBloodDrips() {
+        const bloodBg = document.createElement('div');
+        bloodBg.className = 'blood-drip-bg';
+        document.body.insertBefore(bloodBg, document.body.firstChild);
+
+        for (let i = 0; i < 15; i++) {
+            const drop = document.createElement('div');
+            drop.className = 'blood-drop';
+            drop.style.left = Math.random() * 100 + '%';
+            drop.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            drop.style.animationDelay = Math.random() * 5 + 's';
+            drop.style.height = (Math.random() * 30 + 30) + 'px';
+            bloodBg.appendChild(drop);
+        }
+    }
+
+    createBloodDrips();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+</script>
+</body>
+</html>
