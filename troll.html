@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be My Valentine?</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Eater&family=Metal+Mania&display=swap" rel="stylesheet">
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: 'Metal Mania', serif;
+    background:#0a0a0a;
+    color:white;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+}
+
+/* Background */
+.bg-blur {
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:radial-gradient(circle at center,#200000 0%,#000 70%);
+    filter:blur(10px);
+    z-index:-2;
+}
+
+/* Blood drips */
+.blood-drip-bg {
+    position:fixed;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:-1;
+    overflow:hidden;
+}
+
+.blood-drop {
+    position:absolute;
+    width:3px;
+    background:linear-gradient(180deg,rgba(139,0,0,0.9),rgba(139,0,0,0));
+    animation:drip linear infinite;
+}
+
+@keyframes drip {
+    0%{top:-50px;opacity:1;}
+    100%{top:100vh;opacity:0;}
+}
+
+/* Container */
+.container {
+    text-align:center;
+    padding:40px;
+    animation:fadeIn 1.5s ease;
+}
+
+h1 {
+    font-family:'Eater', cursive;
+    font-size:clamp(2rem,6vw,4rem);
+    color:#8b0000;
+    text-shadow:0 0 30px crimson,0 0 60px darkred;
+    margin-bottom:50px;
+}
+
+/* Buttons */
+.buttons {
+    display:flex;
+    gap:40px;
+    justify-content:center;
+}
+
+button {
+    font-family:'Metal Mania';
+    padding:20px 50px;
+    font-size:1.8rem;
+    border-radius:15px;
+    border:2px solid #8b0000;
+    cursor:pointer;
+    transition:all 0.3s ease;
+    text-transform:uppercase;
+}
+
+#yesBtn {
+    background:#8b0000;
+    color:white;
+    box-shadow:0 0 20px crimson,0 0 40px darkred;
+}
+
+#noBtn {
+    background:black;
+    color:#8b0000;
+}
+
+/* Shake animation */
+@keyframes shake {
+    0%{transform:translate(0,0);}
+    20%{transform:translate(-10px,5px);}
+    40%{transform:translate(10px,-5px);}
+    60%{transform:translate(-8px,4px);}
+    80%{transform:translate(8px,-4px);}
+    100%{transform:translate(0,0);}
+}
+
+.shake {
+    animation:shake 0.4s;
+}
+
+</style>
+</head>
+<body>
+
+<div class="bg-blur"></div>
+
+<div class="container">
+    <h1>Will You Be My Valentine?</h1>
+    <div class="buttons">
+        <button id="yesBtn">YES <3</button>
+        <button id="noBtn">NO т-т</button>
+    </div>
+</div>
+
+<audio id="bgMusic" src="distorted.mp3" loop></audio>
+
+<script>
+let yesBtn = document.getElementById("yesBtn");
+let noBtn = document.getElementById("noBtn");
+let container = document.querySelector(".container");
+let music = document.getElementById("bgMusic");
+
+let scale = 1;
+let clickedOnce = false;
+
+/* Play music after first click (browser restriction fix) */
+document.body.addEventListener("click", () => {
+    music.play().catch(()=>{});
+}, { once:true });
+
+noBtn.addEventListener("click", () => {
+
+    if(!clickedOnce){
+        noBtn.innerText = "ARE YOU SURE?";
+        clickedOnce = true;
+    } else {
+        noBtn.innerText = "REALLY?";
+    }
+
+    scale += 0.3;
+    yesBtn.style.transform = `scale(${scale})`;
+
+    container.classList.add("shake");
+    setTimeout(() => container.classList.remove("shake"), 400);
+});
+
+/* 🔥 REDIRECT ON YES */
+yesBtn.addEventListener("click", () => {
+    yesBtn.innerText = "forever <3";
+    yesBtn.style.transform = "scale(1.5)";
+    
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 800); // small dramatic delay
+});
+
+/* Blood Drips */
+function createBloodDrips(){
+    const bloodBg = document.createElement('div');
+    bloodBg.className='blood-drip-bg';
+    document.body.appendChild(bloodBg);
+
+    for(let i=0;i<20;i++){
+        const drop=document.createElement('div');
+        drop.className='blood-drop';
+        drop.style.left=Math.random()*100+'%';
+        drop.style.animationDuration=(Math.random()*3+2)+'s';
+        drop.style.animationDelay=Math.random()*5+'s';
+        drop.style.height=(Math.random()*50+30)+'px';
+        bloodBg.appendChild(drop);
+    }
+}
+createBloodDrips();
+</script>
+
+</body>
+</html>
