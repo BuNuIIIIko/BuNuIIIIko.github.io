@@ -112,6 +112,55 @@ button {
     animation:shake 0.4s;
 }
 
+    /* SCREEN GLITCH EFFECT */
+.glitch {
+    animation: glitchFlash 0.4s linear;
+}
+
+@keyframes glitchFlash {
+    0% { 
+        transform: translate(0);
+        filter: none;
+    }
+    20% {
+        transform: translate(-5px, 5px);
+        filter: hue-rotate(20deg) contrast(1.4);
+    }
+    40% {
+        transform: translate(5px, -5px);
+        filter: hue-rotate(-20deg) contrast(1.6);
+    }
+    60% {
+        transform: translate(-3px, 3px);
+        filter: brightness(1.5);
+    }
+    80% {
+        transform: translate(3px, -3px);
+        filter: contrast(2);
+    }
+    100% {
+        transform: translate(0);
+        filter: none;
+    }
+}
+
+/* Flicker overlay */
+.glitch-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(255,0,0,0.05);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    animation: flicker 0.15s linear 3;
+    z-index: 999;
+}
+
+@keyframes flicker {
+    0% { opacity: 0.2; }
+    50% { opacity: 0.8; }
+    100% { opacity: 0.1; }
+}
+
 </style>
 </head>
 <body>
@@ -135,7 +184,7 @@ let container = document.querySelector(".container");
 let music = document.getElementById("bgMusic");
 
 let scale = 1;
-let clickedOnce = false;
+let noClickCount = 0;
 
 /* Play music after first click (browser restriction fix) */
 document.body.addEventListener("click", () => {
@@ -144,12 +193,15 @@ document.body.addEventListener("click", () => {
 
 noBtn.addEventListener("click", () => {
 
-    if(!clickedOnce){
+    noClickCount++;
+
+    if(noClickCount === 1){
         noBtn.innerText = "ARE YOU SURE?";
-        clickedOnce = true;
-    } else {
+    } 
+    else if(noClickCount === 2){
         noBtn.innerText = "REALLY?";
-    } else {
+    } 
+    else {
         noBtn.innerText = "PLEASE?";
     }
 
@@ -158,6 +210,19 @@ noBtn.addEventListener("click", () => {
 
     container.classList.add("shake");
     setTimeout(() => container.classList.remove("shake"), 400);
+
+    // 🔥 GLITCH EFFECT
+document.body.classList.add("glitch");
+
+const overlay = document.createElement("div");
+overlay.className = "glitch-overlay";
+document.body.appendChild(overlay);
+
+setTimeout(() => {
+    document.body.classList.remove("glitch");
+    overlay.remove();
+}, 400);
+
 });
 
 /* 🔥 REDIRECT ON YES */
@@ -167,7 +232,7 @@ yesBtn.addEventListener("click", () => {
     
     setTimeout(() => {
         window.location.href = "index.html";
-    }, 800); // small dramatic delay
+    }, 800);
 });
 
 /* Blood Drips */
@@ -188,7 +253,7 @@ function createBloodDrips(){
 }
 createBloodDrips();
 </script>
-
 </body>
 </html>
+
 
